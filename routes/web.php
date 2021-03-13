@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MainUserController;
+use App\Http\Controllers\MainAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,9 +40,9 @@ Route::middleware(['auth:sanctum,web', 'verified'])->get('/dashboard', function 
 
 
 
-//Admin Backend Operations
+//Admin Logout
 Route::get('/admin/logout',[AdminController::class,'destroy'])->name('admin.logout');
-
+ 
 
 
 
@@ -53,3 +54,12 @@ Route::get('/user/profile/edit',[MainUserController::class,'UserProfileEdit'])->
 Route::post('/user/profile/store',[MainUserController::class,'UserProfileStore'])->name('profile.store');
 Route::get('/user/password/view',[MainUserController::class,'UserpPasswordView'])->name('user.password.view');
 Route::post('/user/password/update',[MainUserController::class,'UserPasswordUpdate'])->name('password.update');
+
+
+//Admin Backend Operations
+ 
+Route::get('/admin/profile',[MainAdminController::class,'AdminProfile'])->name('admin.profile');
+Route::get('/admin/profile/edit',[MainAdminController::class,'AdminProfileEdit'])->name('admin.profile.edit');
+Route::post('/admin/profile/store',[MainAdminController::class,'AdminProfileStore'])->name('admin.profile.store');
+Route::get('/admin/password/view',[MainAdminController::class,'AdminPasswordView'])->name('admin.password.view');
+Route::post('/admin/password/update',[MainAdminController::class,'AdminPasswordUpdate'])->name('admin.password.update');
