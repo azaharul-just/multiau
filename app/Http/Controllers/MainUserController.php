@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class MainUserController extends Controller
 {
@@ -51,6 +52,47 @@ class MainUserController extends Controller
         return Redirect()->route('user.profile')->with($notification);
 
     }
+
+    public function UserpPasswordView(){
+        return view('user.password.edit_password');
+    }
+
+    public function UserPasswordUpdate(Request $request){
+        $validatedData = $request->validate([ 
+            'oldpassword' => 'required',  
+            'password' => 'required|confirmed',
+        ]);  
+
+        $hashedPassword = Auth::user()->password; 
+        $password = $request->oldpassword;
+        
+        if (Hash::check($password,$hashedPassword)) {
+            $user = User::find(Auth::id());
+            $user->password = Hash::make($request->password);
+            $user->save();
+            Auth::logout();
+
+            //return redirect()->route('login')->with('success','Password Changed Successfully');
+
+             $notification = array(
+            'message'=>'Profile Update Successfully',
+            'alert-type'=>'success'
+            );
+
+            return Redirect()->route('login')->with($notification);
+
+
+        }else{
+
+             $notification = array(
+            'message'=>'Current Password Invalid',
+            'alert-type'=>'warning'
+            );
+
+            return Redirect()->back()->with($notification);
+            //return redirect()->back()->with('success','Current Password Invalid'); 
+        }
+    } 
 
 
 
